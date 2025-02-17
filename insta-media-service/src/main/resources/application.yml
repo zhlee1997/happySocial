@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: INSTA-MEDIA-SERVICE
+  profiles:
+    active: local
+
+#  docker:
+#    compose:
+#      file: src/main/docker/compose.yaml  # Adjust the path based on your project structure
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone : http://localhost:8761/eureka/

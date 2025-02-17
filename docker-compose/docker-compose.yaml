@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-db-compose
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: instadb
+    ports:
+      - "5430:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - insta-network
+
+  redis:
+    image: redis:latest
+    container_name: redis7-compose
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - insta-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-compose
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"  # Message broker port
+      - "15672:15672" # RabbitMQ Management UI
+    networks:
+      - insta-network
+
+# networks:
+#   app_network:
+#     driver: bridge
+
+networks:
+  insta-network:
+    external: true
+
+volumes:
+  postgres_data:
+  minio_data:

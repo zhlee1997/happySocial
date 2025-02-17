@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: INSTA-MEDIA-SERVICE
+#  docker:
+#    compose:
+#      file: src/main/docker/compose.yaml  # Adjust the path based on your project structure
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://insta-service-registry:8761/eureka/
+
+minio:
+  url: http://nginx:9002
+  access:
+    name: ROOTNAME
+    secret: CHANGEME123
+  bucket:
+    name: insta-post-bucket

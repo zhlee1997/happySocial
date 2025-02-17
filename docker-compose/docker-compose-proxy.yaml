@@ -1,0 +1,85 @@
+services:
+  # HAProxy 1
+  haproxy_1:
+    image: haproxy:latest
+    container_name: haproxy_1
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    ports:
+      - 4444:4444     # Stats page
+      - 1905:1905     # API Gateway traffic
+    networks:
+      - insta-network
+    environment:
+      - PROMETHEUS_PORT=9101  # Assuming you're exposing HAProxy metrics on port 9101
+
+  # HAProxy 2
+  # haproxy_2:
+  #   image: haproxy:latest
+  #   container_name: haproxy_2
+  #   volumes:
+  #     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+  #   ports:
+  #     - 4445:4444     # Stats page (Different from HAProxy 1)
+  #     - 1906:1905     # API Gateway traffic (Different from HAProxy 1)
+  #   networks:
+  #     - insta-network
+  #   environment:
+  #     - PROMETHEUS_PORT=9102  # Assuming you're exposing HAProxy metrics on port 9102
+
+  # Prometheus
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    command: "--config.file=/etc/prometheus/prometheus.yml"
+    networks:
+      - insta-network
+    depends_on:
+      - haproxy_1
+      # - haproxy_2
+
+  # Grafana
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=tugay
+      - GF_SECURITY_ADMIN_USER=tugay
+    networks:
+      - insta-network
+    depends_on:
+      - prometheus
+
+  # Application Platform Thread
+  # application-platform-thread:
+  #   image: tugayesilyurt/application-platform-thread
+  #   container_name: application-platform-thread
+  #   build: 
+  #      context: ./spring-boot-3-java-21-platform-thread
+  #      dockerfile: Dockerfile
+  #   ports:
+  #     - "8090:8090"
+  #   networks:
+  #     - insta-network
+
+  # Application Virtual Thread
+  # application-virtual-thread:
+  #   image: tugayesilyurt/application-virtual-thread
+  #   container_name: application-virtual-thread
+  #   build: 
+  #      context: ./spring-boot-3-java-21-virtual-thread
+  #      dockerfile: Dockerfile
+  #   ports:
+  #     - "8091:8091"
+  #   networks:
+  #     - insta-network
+
+networks:
+  insta-network:
+    external: true

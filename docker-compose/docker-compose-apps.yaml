@@ -1,0 +1,100 @@
+services:
+  insta-service-registry:
+    build: 
+      context: ../insta-service-registry
+      dockerfile: Dockerfile
+    container_name: insta-service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - insta-network
+
+  insta-config-server:
+    build: 
+      context: ../insta-config-server
+      dockerfile: Dockerfile
+    container_name: insta-config-server
+    ports:
+      - "8888:8888"
+    networks:
+      - insta-network
+
+  insta-gateway-service:
+    build: 
+      context: ../insta-gateway-service
+      dockerfile: Dockerfile
+    container_name: insta-gateway-service
+    ports:
+      - "8765:8765"
+    networks:
+      - insta-network
+    depends_on:
+      - insta-config-server
+      - insta-service-registry
+  
+  insta-auth-service:
+    build: 
+      context: ../insta-auth-service
+      dockerfile: Dockerfile
+    container_name: insta-auth-service
+    ports:
+      - "8000:8000"
+    networks:
+      - insta-network
+    depends_on:
+      - insta-config-server
+      - insta-service-registry
+
+  insta-media-service:
+    build: 
+      context: ../insta-media-service
+      dockerfile: Dockerfile
+    container_name: insta-media-service
+    ports:
+      - "8081:8081"
+    networks:
+      - insta-network
+    depends_on:
+      - insta-config-server
+      - insta-service-registry
+    environment:
+      - JAVA_OPTS=-Djava.io.tmpdir=/tmp
+    volumes:
+      - tmp:/tmp
+
+  insta-post-service:
+    build: 
+      context: ../insta-post-service
+      dockerfile: Dockerfile
+    container_name: insta-post-service
+    ports:
+      - "8082:8082"
+    networks:
+      - insta-network
+    depends_on:
+      - insta-config-server
+      - insta-service-registry
+    environment:
+      - JAVA_OPTS=-Djava.io.tmpdir=/tmp
+    volumes:
+      - tmp:/tmp
+
+  insta-user-service:
+    build: 
+      context: ../insta-user-service
+      dockerfile: Dockerfile
+    container_name: insta-user-service
+    ports:
+      - "8001:8001"
+    networks:
+      - insta-network
+    depends_on:
+      - insta-config-server
+      - insta-service-registry
+
+networks:
+  insta-network:
+    external: true
+
+volumes:
+  tmp:
