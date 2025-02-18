@@ -47,10 +47,10 @@ jobs:
           cd insta-service-registry
           docker build -t leezonghan19/happysocial-backend:insta-service-registry.latest .
           docker push leezonghan19/happysocial-backend:insta-service-registry.latest
-          cd insta-config-server
+          cd ../insta-config-server
           docker build -t leezonghan19/happysocial-backend:insta-config-server.latest .
           docker push leezonghan19/happysocial-backend:insta-config-server.latest
-          cd insta-gateway-service
+          cd ../insta-gateway-service
           docker build -t leezonghan19/happysocial-backend:insta-gateway-service.latest .
           docker push leezonghan19/happysocial-backend:insta-gateway-service.latest
 
