@@ -30,7 +30,7 @@ jobs:
           cache: maven
       - name: Build insta-service-registry with Maven
         run: |
-          cd insta-user-service
+          cd insta-post-service
           mvn clean package
 
       - name: Set up Docker Buildx
@@ -44,9 +44,9 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          cd insta-user-service
-          docker build -t leezonghan19/happysocial-backend:insta-user-service.latest .
-          docker push leezonghan19/happysocial-backend:insta-user-service.latest
+          cd insta-post-service
+          docker build -t leezonghan19/happysocial-backend:insta-post-service.latest .
+          docker push leezonghan19/happysocial-backend:insta-post-service.latest
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
