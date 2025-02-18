@@ -40,7 +40,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: leezonghan19
-          password: ${{ secrets.DOCKER_PASSWORD }} # Use DOCKER_ACCESS_TOKEN instead if applicable
+          password: Siv170013! # Use DOCKER_ACCESS_TOKEN instead if applicable
 
       - name: Build and Push Docker Image
         run: |
