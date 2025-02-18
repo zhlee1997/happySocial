@@ -45,8 +45,8 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           cd insta-service-registry
-          docker build -t leezonghan19/happysocial-backend:latest .
-          docker push leezonghan19/happysocial-backend:latest
+          docker build -t leezonghan19/happysocial-backend:insta-service-registry.latest .
+          docker push leezonghan19/happysocial-backend:insta-service-registry.latest
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
