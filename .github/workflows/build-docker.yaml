@@ -42,11 +42,17 @@ jobs:
           username: leezonghan19
           password: Siv170013! # Use DOCKER_ACCESS_TOKEN instead if applicable
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker Images
         run: |
           cd insta-service-registry
           docker build -t leezonghan19/happysocial-backend:insta-service-registry.latest .
           docker push leezonghan19/happysocial-backend:insta-service-registry.latest
+          cd insta-config-server
+          docker build -t leezonghan19/happysocial-backend:insta-config-server.latest .
+          docker push leezonghan19/happysocial-backend:insta-config-server.latest
+          cd insta-gateway-service
+          docker build -t leezonghan19/happysocial-backend:insta-gateway-service.latest .
+          docker push leezonghan19/happysocial-backend:insta-gateway-service.latest
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
