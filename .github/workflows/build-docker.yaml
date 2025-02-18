@@ -19,6 +19,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Service containers to run with `runner-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: instadb
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+          - 5430:5432
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -30,7 +52,7 @@ jobs:
           cache: maven
       - name: Build insta-service-registry with Maven
         run: |
-          cd insta-media-service
+          cd insta-user-service
           mvn clean package
 
       - name: Set up Docker Buildx
@@ -44,9 +66,9 @@ jobs:
 
       - name: Build and Push Docker Images
         run: |
-          cd insta-media-service
-          docker build -t leezonghan19/happysocial-backend:insta-media-service.latest .
-          docker push leezonghan19/happysocial-backend:insta-media-service.latest
+          cd insta-user-service
+          docker build -t leezonghan19/happysocial-backend:insta-user-service.latest .
+          docker push leezonghan19/happysocial-backend:insta-user-service.latest
 
       # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
       # - name: Update dependency graph
