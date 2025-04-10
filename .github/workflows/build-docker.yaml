@@ -41,13 +41,13 @@ jobs:
           cd ../idea-link-service
           mvn clean package -DskipTests
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
+      # deploy:
+      #   runs-on: ubuntu-latest
+      #   needs: build
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      #   steps:
+      #     - name: Checkout Repository
+      #       uses: actions/checkout@v4
 
       - name: Install Pack CLI
         uses: buildpacks/github-actions/setup-pack@v5.0.0
