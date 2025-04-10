@@ -1,0 +1,45 @@
+version: "3"
+
+vars:
+  GOOS: "{{default OS .GOOS}}"
+  MVNW: '{{if eq .GOOS "windows"}}mvnw.cmd{{else}}./mvnw{{end}}'
+  DC_DIR: "deployment/docker-compose"
+  APPS_DC_FILE: "{{.DC_DIR}}/apps.yml"
+  INFRA_DC_FILE: "{{.DC_DIR}}/infra.yml"
+
+tasks:
+  build:
+    desc: "Build the project"
+    cmds:
+      - "{{.MVNW}} -pl insta-service-registry clean package -DskipTests"
+      - "{{.MVNW}} -pl insta-config-server clean package -DskipTests"
+      - "{{.MVNW}} -pl insta-gateway-service clean package -DskipTests"
+      - "{{.MVNW}} -pl idea-link-service clean package -DskipTests"
+
+  build_image:
+    desc: "Build the docker images"
+    cmds:
+      - "{{.MVNW}} -pl insta-service-registry spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl insta-config-server spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl insta-gateway-service spring-boot:build-image -DskipTests"
+      - "{{.MVNW}} -pl idea-link-service spring-boot:build-image -DskipTests"
+
+  start:
+    desc: Start all services using Docker Compose
+    cmds:
+      - "docker compose -f {{.APPS_DC_FILE}} -f {{.INFRA_DC_FILE}} up -d"
+
+  stop:
+    desc: Stop all services
+    cmds:
+      - "docker compose -f {{.APPS_DC_FILE}} -f {{.INFRA_DC_FILE}} down"
+
+  start_infra:
+    cmds:
+      - "docker compose -f {{.INFRA_DC_FILE}} up -d"
+    desc: "Start the infrastructure"
+
+  stop_infra:
+    cmds:
+      - "docker compose -f {{.INFRA_DC_FILE}} down"
+    desc: "Stop the infrastructure"

@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class JwtTokenUtils {
 
-    //    This utility will handle token creation, parsing, and validation.
+    // This utility will handle token creation, parsing, and validation.
 
     @Value("${auth.token.jwtSecret}")
     private String jwtSecret;
@@ -24,7 +24,7 @@ public class JwtTokenUtils {
     @Value("${auth.token.expirationInMils}")
     private int expirationTime;
 
-    private Key key(){
+    private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
     }
 

@@ -1,0 +1,56 @@
+services:
+  link-service:
+    image: idea-link-service:0.0.1-SNAPSHOT # Ensure tag matches!
+    container_name: link-service
+    environment:
+      - DB_URL=mongodb://root:password@mongodb:27017/ideas?directConnection=true&serverSelectionTimeoutMS=2000&authSource=admin&appName=mongosh+2.5.0
+      - EUREKA_URL=http://service-registry:8761/eureka
+    ports:
+      - "8334:8334"
+    restart: unless-stopped
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  service-registry:
+    image: insta-service-registry:0.0.1-SNAPSHOT # Ensure tag matches!
+    container_name: service-registry
+    ports:
+      - "8761:8761"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  config-service:
+    image: insta-config-server:0.0.1-SNAPSHOT # Ensure tag matches!
+    container_name: config-service
+    ports:
+      - "8888:8888"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+
+  api-gateway:
+    image: insta-gateway-service:0.0.1-SNAPSHOT # Ensure tag matches!
+    container_name: api-gateway
+    environment:
+      - EUREKA_URL=http://service-registry:8761/eureka
+      - CONFIG_URL=http://config-service:8888
+    ports:
+      - "8765:8765"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    depends_on:
+      - service-registry
+      - config-service
