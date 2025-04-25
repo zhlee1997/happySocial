@@ -18,6 +18,10 @@ pipeline {
                         sh '''
                             cd insta-service-registry
                             mvn clean package -DskipTests
+                            cd ../insta-config-server
+                            mvn clean package -DskipTests
+                            cd ../insta-gateway-service
+                            mvn clean package -DskipTests
                         '''
                     }
                 }
@@ -36,6 +40,16 @@ pipeline {
                 sh '''
                     cd insta-service-registry
                       pack build 565428532910.dkr.ecr.us-east-1.amazonaws.com/leezonghan19/link-app:latest \
+                        --builder paketobuildpacks/builder-jammy-tiny \
+                        --path target/*.jar \
+                        --publish
+                    cd ../insta-config-server
+                      pack build 565428532910.dkr.ecr.us-east-1.amazonaws.com/linkspark/config-service:latest \
+                        --builder paketobuildpacks/builder-jammy-tiny \
+                        --path target/*.jar \
+                        --publish
+                      cd ../insta-gateway-service
+                      pack build 565428532910.dkr.ecr.us-east-1.amazonaws.com/linkspark/api-gateway:latest \
                         --builder paketobuildpacks/builder-jammy-tiny \
                         --path target/*.jar \
                         --publish
