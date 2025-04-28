@@ -23,7 +23,7 @@ public class ApiGatewayConfig {
                 Function<PredicateSpec, Buildable<Route>> routeFunction = predicateSpec -> predicateSpec
                                 // can match on headers, host, request method, query parameter
                                 // matches on the path
-                                .path("/getss")
+                                .path("/get")
                                 .filters(gatewayFilterSpec -> gatewayFilterSpec
                                                 // can be Autheication Header
                                                 .addRequestHeader("MyHeader", "MyURI")
